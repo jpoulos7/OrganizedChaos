@@ -1,111 +1,234 @@
-<!doctype html><html lang=en>
-<head>
-<title>
-ESXi Cluster - Part 1 ::
-Organized Chaos
-</title>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content="A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        ESXi Cluster - Part 1 ::
+        Organized Chaos
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!
 Part 1 of this series will focus on specs, cabling, and IPMI configuration.
-">
-<meta name=keywords content>
-<meta name=robots content="noodp">
-<link rel=canonical href=https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/2-node-esxi-part-1/>
-<link rel=stylesheet href=https://blog.organizedchaos.tech/assets/style.css>
-<link rel=stylesheet href=https://blog.organizedchaos.tech/style.css>
-<link rel=apple-touch-icon-precomposed sizes=144x144 href=https://blog.organizedchaos.tech/img/apple-touch-icon-144-precomposed.png>
-<link rel="shortcut icon" href=https://blog.organizedchaos.tech/img/favicon.png>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Italic.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Regular.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Medium.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-MediumItalic.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Bold.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-BoldItalic.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="ESXi Cluster - Part 1">
-<meta name=twitter:description content="A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!
-Part 1 of this series will focus on specs, cabling, and IPMI configuration.">
-<meta property="og:title" content="ESXi Cluster - Part 1">
+"
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/2-node-esxi-part-1/" />
+
+
+
+
+
+<link rel="stylesheet" href="https://blog.organizedchaos.tech/assets/style.css" />
+
+<link rel="stylesheet" href="https://blog.organizedchaos.tech/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://blog.organizedchaos.tech/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://blog.organizedchaos.tech/img/favicon.png" />
+
+
+<link href="https://blog.organizedchaos.tech/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://blog.organizedchaos.tech/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://blog.organizedchaos.tech/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://blog.organizedchaos.tech/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://blog.organizedchaos.tech/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://blog.organizedchaos.tech/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ESXi Cluster - Part 1"/>
+<meta name="twitter:description" content="A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!
+Part 1 of this series will focus on specs, cabling, and IPMI configuration."/>
+
+
+
+<meta property="og:title" content="ESXi Cluster - Part 1" />
 <meta property="og:description" content="A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!
-Part 1 of this series will focus on specs, cabling, and IPMI configuration.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/2-node-esxi-part-1/"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2021-12-11T18:39:50-05:00">
-<meta property="article:modified_time" content="2021-12-11T18:39:50-05:00"><meta property="og:site_name" content="Organized Chaos">
-</head>
-<body class=dark-theme>
-<div class=container>
-<header class=header>
-<span class=header__inner>
-<a href=/ class=logo style=text-decoration:none>
-<span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg>
+Part 1 of this series will focus on specs, cabling, and IPMI configuration." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/2-node-esxi-part-1/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-12-11T18:39:50-05:00" />
+<meta property="article:modified_time" content="2021-12-11T18:39:50-05:00" /><meta property="og:site_name" content="Organized Chaos" />
+
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
 </span>
-<span class=logo__text>organized_chaos</span>
-<span class=logo__cursor></span>
+    <span class="logo__text"
+      >organized_chaos</span
+    >
+    <span class="logo__cursor"></span>
+  
 </a>
-<span class=header__right>
-<nav class=menu>
-<ul class="menu__inner menu__inner--desktop">
-<li><a href=/about>About</a></li>
-</ul>
-<ul class="menu__inner menu__inner--mobile">
-<li><a href=/about>About</a></li>
-</ul>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+  </ul>
 </nav>
-<span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-</span>
-<span class=theme-toggle><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41c10.4934.0 19-8.5066 19-19C41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg>
-</span>
-</span>
-</span>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
 </header>
-<div class=content>
-<div class=post>
-<h1 class=post-title>ESXi Cluster - Part 1</h1>
-<div class=post-meta>
-<span class=post-date>
-2021-12-11
-</span>
-<span class=post-author>— Written by jp</span>
-<span class=post-read-time>— 4 min read</span>
-</div>
-<figure class=post-cover>
-<img src=https://blog.organizedchaos.tech/covers/supermicro.png alt="ESXi Cluster - Part 1">
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">ESXi Cluster - Part 1</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2021-12-11
+        </span>
+
+        
+          
+            
+
+
+
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by jp</span
+        >
+
+
+      
+        <span class="post-read-time"
+          >— 4 min read</span
+        >
+      
+    </div>
+
+    
+
+    
+      <figure class="post-cover">
+  
+    <img src="https://blog.organizedchaos.tech/covers/supermicro_t.png" alt="ESXi Cluster - Part 1"/>
+  
+
+  
 </figure>
-<div class=post-content>
-<p>A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!</p>
+
+    
+
+    <div class="post-content">
+      
+      <p>A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!</p>
 <p>Part 1 of this series will focus on specs, cabling, and IPMI configuration.</p>
-<h2 id=specs>Specs</h2>
+<h2 id="specs">Specs</h2>
 <ul>
 <li>Supermicro 2U, 16 Bay chassis</li>
-<li>Motherboard: <a href=https://www.supermicro.com/products/motherboard/xeon/c600/x9drw-7tpf_.cfm>Supermicro X9DRW-7TPF+</a></li>
-<li>CPU: Dual <a href=https://ark.intel.com/content/www/us/en/ark/products/75281/intel-xeon-processor-e52695-v2-30m-cache-2-40-ghz.html>Intel Xeon E5-2695v2</a> 12C/24T @ 2.40GHZ base</li>
+<li>Motherboard: <a href="https://www.supermicro.com/products/motherboard/xeon/c600/x9drw-7tpf_.cfm">Supermicro X9DRW-7TPF+</a></li>
+<li>CPU: Dual <a href="https://ark.intel.com/content/www/us/en/ark/products/75281/intel-xeon-processor-e52695-v2-30m-cache-2-40-ghz.html">Intel Xeon E5-2695v2</a> 12C/24T @ 2.40GHZ base</li>
 <li>RAM: 328GB Registered-ECC (10 16GB DIMM&rsquo;s per CPU)</li>
 <li>Network: Dual 10GB SFP+ (Intel 82599EB Controller)</li>
-<li>HBA: <a href=https://storage.microsemi.com/en-us/support/raid/sas_raid/sas-71605/>Adaptec RAID 71605</a></li>
-<li>Drives: 14 Seagate 10K SAS & 2 Intel 128GB SSD DC S3500 Series (w/ MLC flash).</li>
+<li>HBA: <a href="https://storage.microsemi.com/en-us/support/raid/sas_raid/sas-71605/">Adaptec RAID 71605</a></li>
+<li>Drives: 14 Seagate 10K SAS &amp; 2 Intel 128GB SSD DC S3500 Series (w/ MLC flash).</li>
 <li>Boot Drive: 256GB Samsung SSD</li>
 </ul>
 <hr>
-<h2 id=cabling>Cabling</h2>
-<p>I tried to keep the cabling as simple as possible. From left to right&mldr;</p>
+<p>pi</p>
+<h2 id="cabling">Cabling</h2>
+<p>I tried to keep the cabling as simple as possible. From left to right&hellip;</p>
 <ul>
 <li>IPMI</li>
 <li>ESXi Management Interface</li>
 <li>10GbE uplink to Edgeswitch 48-lite (VM Traffic)</li>
-<li>10GbE DAC to the other Supermicro sever (vSAN & vMotion)</li>
+<li>10GbE DAC to the other Supermicro sever (vSAN &amp; vMotion)</li>
 </ul>
-<img src=/2-node-esxi/supermicro_rear.png alt="Server rear cabling view" class=center style=border-radius:10px>
+
+  <img src="/posts/2-node-esxi/supermicro_rear.png"  alt="Server rear cabling view"  class="center"  style="border-radius: 10px;"  />
+
+
 <hr>
-<h2 id=ipmi-configuration>IPMI Configuration</h2>
+<h2 id="ipmi-configuration">IPMI Configuration</h2>
 <p>Even though these servers sit 5 feet away from my desk, I still wanted to be able to manage them without having to use a physical KVM. The first thing to do is configure the IPMI interfaces.</p>
 <p>On my Edgerouter-4 I have a virtual interface configured for the Out-of-Band (OOB) network on vlan 2286</p>
-<pre tabindex=0><code>ubnt@er-4# show interfaces ethernet eth1 vif 2286
+<pre tabindex="0"><code>ubnt@er-4# show interfaces ethernet eth1 vif 2286
  address 10.1.2.1/26
  description OOB
 </code></pre><p>I also have a DHCP server setup to hand out leases on the OOB network. Trust me, it&rsquo;s way easier than fumbling around with static IP&rsquo;s.</p>
-<pre tabindex=0><code>ubnt@er-4# show service dhcp-server shared-network-name OOB
+<pre tabindex="0"><code>ubnt@er-4# show service dhcp-server shared-network-name OOB
  authoritative disable
  subnet 10.1.2.0/26 {
      default-router 10.1.2.1
@@ -116,7 +239,7 @@ Part 1 of this series will focus on specs, cabling, and IPMI configuration.">
      }
  }
 </code></pre><p>The IPMI interfaces on the back of each server are connected to interfaces 0/9 and 0/10 on my Edgeswitch 48 lite. The switchport configs look like this:</p>
-<pre tabindex=0><code>interface 0/9
+<pre tabindex="0"><code>interface 0/9
 description 'Top IPMI'
 ip dhcp snooping trust
 ipv6 dhcp snooping trust
@@ -135,13 +258,13 @@ vlan participation exclude 1,2280,2282-2285,2287,2290-2294
 vlan participation include 2286
 exit
 </code></pre><p>Now each server is pulling a DCHP lease!</p>
-<pre tabindex=0><code>ubnt@er-4:~$ show dhcp leases
+<pre tabindex="0"><code>ubnt@er-4:~$ show dhcp leases
 IP address      Hardware Address   Lease expiration     Pool
 ----------      ----------------   ----------------     ----
 10.1.2.3        XX:XX:XX:XX:XX:26  2021/12/12 05:51:35  OOB
 10.1.2.4        XX:XX:XX:XX:XX:a2  2021/12/12 05:51:35  OOB
 </code></pre><p>Now that the IPMI network is configured, I can use <code>ipmitool</code> to manipulate and also get information from the servers. Here are some examples:</p>
-<pre tabindex=0><code>admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis power status
+<pre tabindex="0"><code>admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis power status
 Chassis Power is off
 admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis bootparam set bootflag force_bios
 Set Boot Device to force_bios
@@ -154,51 +277,96 @@ admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN sdr t
 PS1 Status       | C8h | ok  | 10.1 | Presence detected
 PS2 Status       | C9h | ok  | 10.2 | Presence detected
 </code></pre><p>There are 2 choices for gaining &ldquo;KVM-like&rdquo; access to the servers. The first option is a Java Virtual KVM client available, but using it is clunky and requires downloading a java applet every time I need to use it (It also requires a few overrides in the Java security control panel). The second option is the Serial-Over-LAN (SOL) console. Since the SOL console is not enabled by default, I had to change a couple of BIOS settings to get it working:</p>
-<pre tabindex=0><code>- Advanced -&gt; Super IO Configuration -&gt; Serial Port 2 Configuration -&gt; Serial Port 2 Attribute [SOL]
+<pre tabindex="0"><code>- Advanced -&gt; Super IO Configuration -&gt; Serial Port 2 Configuration -&gt; Serial Port 2 Attribute [SOL]
 - Advanced -&gt; Serial Port Console Redirection -&gt; COM2 Console Redirection [Enabled]
 </code></pre><p>Now I can power the server on, wait a few seconds, and then connect to the SOL console.</p>
-<pre tabindex=0><code>admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis power on
+<pre tabindex="0"><code>admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis power on
 Chassis Power Control: Up/On
 admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN sol activate
 </code></pre><p>Works like a charm; I have full access to the server without having to plug in a monitor and keyboard!</p>
-<img src=/2-node-esxi/sol-demo.gif alt="Hello Friend" class=center style=border-radius:10px>
+
+  <img src="/posts/2-node-esxi/sol-demo.gif"  alt="Hello Friend"  class="center"  style="border-radius: 10px;"  />
+
+
 <hr>
 <p>In part 2 I will install ESXi, configure the ESXi management network, and install the Adaptec drivers.</p>
-</div>
-<div class=pagination>
-<div class=pagination__title>
-<span class=pagination__title-h>Read other posts</span>
-<hr>
-</div>
-<div class=pagination__buttons>
-<span class="button next">
-<a href=https://blog.organizedchaos.tech/posts/2021/11/pi-pico-first/>
-<span class=button__text>Raspberry Pi Pico Temperature Sensor</span>
-<span class=button__icon>→</span>
-</a>
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+            
+              <span class="button next">
+                <a href="https://blog.organizedchaos.tech/posts/2021/11/pi-pico-first/">
+                  <span class="button__text">Raspberry Pi Pico Temperature Sensor</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
 </span>
-</div>
-</div>
-</div>
-</div>
-<footer class=footer>
-<div class=footer__inner>
-<a href=/ class=logo style=text-decoration:none>
-<span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg>
-</span>
-<span class=logo__text>organized_chaos</span>
-<span class=logo__cursor></span>
+    <span class="logo__text"
+      >organized_chaos</span
+    >
+    <span class="logo__cursor"></span>
+  
 </a>
-<div class=copyright>
-<span>© 2021 Powered by
-<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a></span>
-<span>Theme created by
-<a href=https://twitter.com/panr target=_blank rel=noopener>panr</a></span>
-</div>
-</div>
+
+      <div class="copyright">
+        <span
+          >© 2021 Powered by
+          <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a></span
+        >
+        <span
+          >Theme created by
+          <a href="https://twitter.com/panr" target="_blank" rel="noopener">panr</a></span
+        >
+      </div>
+    
+  </div>
 </footer>
-<script src=https://blog.organizedchaos.tech/assets/main.js></script>
-<script src=https://blog.organizedchaos.tech/assets/prism.js></script>
-</div>
-</body>
+
+<script src="https://blog.organizedchaos.tech/assets/main.js"></script>
+<script src="https://blog.organizedchaos.tech/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
 </html>
