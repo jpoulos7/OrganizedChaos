@@ -88,7 +88,6 @@ Part 1 of this series will focus on specs, cabling, and IPMI configuration.">
 <li>Boot Drive: 256GB Samsung SSD</li>
 </ul>
 <hr>
-<p>pi</p>
 <h2 id=cabling>Cabling</h2>
 <p>I tried to keep the cabling as simple as possible. From left to right&mldr;</p>
 <ul>
@@ -135,7 +134,7 @@ vlan pvid 2286
 vlan participation exclude 1,2280,2282-2285,2287,2290-2294
 vlan participation include 2286
 exit
-</code></pre><p>Now each server is pulling a DCHP lease!</p>
+</code></pre><p>Now each server is pulling a DHCP lease!</p>
 <pre tabindex=0><code>ubnt@er-4:~$ show dhcp leases
 IP address      Hardware Address   Lease expiration     Pool
 ----------      ----------------   ----------------     ----
@@ -191,7 +190,7 @@ admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN sol a
 <span class=logo__cursor></span>
 </a>
 <div class=copyright>
-<span>© 2021 Powered by
+<span>© 2022 Powered by
 <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a></span>
 <span>Theme created by
 <a href=https://twitter.com/panr target=_blank rel=noopener>panr</a></span>
