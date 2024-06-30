@@ -1,0 +1,167 @@
+<!doctype html><html lang=en>
+<head>
+<title>
+Labels Made Easy ::
+Organized Chaos
+</title>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=description content="I work as a systems engineer at a big tech company, but back home my family is in the bakery business. In my spare time, I like to build things to help make the bakery more efficient and organized. By far, my biggest bakery project has been an order tracking system I like to call OrderMonger, but that&amp;rsquo;s a story for a different day. Today, I want to talk about the inventory labeling system I built from scratch in less than two weeks.">
+<meta name=keywords content>
+<meta name=robots content="noodp">
+<link rel=canonical href=https://blog.organizedchaos.tech/posts/2024/06/label-maker/>
+<link rel=stylesheet href=https://blog.organizedchaos.tech/assets/style.css>
+<link rel=stylesheet href=https://blog.organizedchaos.tech/style.css>
+<link rel=apple-touch-icon-precomposed sizes=144x144 href=https://blog.organizedchaos.tech/img/apple-touch-icon-144-precomposed.png>
+<link rel="shortcut icon" href=https://blog.organizedchaos.tech/img/favicon.png>
+<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Italic.woff2 rel=preload type=font/woff2 as=font crossorigin>
+<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Regular.woff2 rel=preload type=font/woff2 as=font crossorigin>
+<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Medium.woff2 rel=preload type=font/woff2 as=font crossorigin>
+<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-MediumItalic.woff2 rel=preload type=font/woff2 as=font crossorigin>
+<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Bold.woff2 rel=preload type=font/woff2 as=font crossorigin>
+<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-BoldItalic.woff2 rel=preload type=font/woff2 as=font crossorigin>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Labels Made Easy">
+<meta name=twitter:description content="I work as a systems engineer at a big tech company, but back home my family is in the bakery business. In my spare time, I like to build things to help make the bakery more efficient and organized. By far, my biggest bakery project has been an order tracking system I like to call OrderMonger, but that&rsquo;s a story for a different day. Today, I want to talk about the inventory labeling system I built from scratch in less than two weeks.">
+<meta property="og:title" content="Labels Made Easy">
+<meta property="og:description" content="I work as a systems engineer at a big tech company, but back home my family is in the bakery business. In my spare time, I like to build things to help make the bakery more efficient and organized. By far, my biggest bakery project has been an order tracking system I like to call OrderMonger, but that&rsquo;s a story for a different day. Today, I want to talk about the inventory labeling system I built from scratch in less than two weeks.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.organizedchaos.tech/posts/2024/06/label-maker/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2024-06-15T13:19:57-04:00">
+<meta property="article:modified_time" content="2024-06-15T13:19:57-04:00"><meta property="og:site_name" content="Organized Chaos">
+</head>
+<body class=dark-theme>
+<div class=container>
+<header class=header>
+<span class=header__inner>
+<a href=/ class=logo style=text-decoration:none>
+<span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg>
+</span>
+<span class=logo__text>organized_chaos</span>
+<span class=logo__cursor></span>
+</a>
+<span class=header__right>
+<nav class=menu>
+<ul class="menu__inner menu__inner--desktop">
+<li><a href=/about>About</a></li>
+</ul>
+<ul class="menu__inner menu__inner--mobile">
+<li><a href=/about>About</a></li>
+</ul>
+</nav>
+<span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+</span>
+<span class=theme-toggle><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41c10.4934.0 19-8.5066 19-19C41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg>
+</span>
+</span>
+</span>
+</header>
+<div class=content>
+<div class=post>
+<h1 class=post-title>Labels Made Easy</h1>
+<div class=post-meta>
+<span class=post-date>
+2024-06-15
+</span>
+<span class=post-author>— Written by jp</span>
+<span class=post-read-time>— 5 min read</span>
+</div>
+<figure class=post-cover>
+<img src=https://blog.organizedchaos.tech/covers/label_maker_header.jpg alt="Labels Made Easy">
+</figure>
+<div class=post-content>
+<p>I work as a systems engineer at a big tech company, but back home my family is in the bakery business. In my spare time, I like to build things to help make the bakery more efficient and organized. By far, my biggest bakery project has been an order tracking system I like to call OrderMonger, but that&rsquo;s a story for a different day. Today, I want to talk about the inventory labeling system I built from scratch in less than two weeks.</p>
+<hr>
+<h3 id=background>Background</h3>
+<p>As an old-school, made-from-scratch bakery with lots of variety, we have ingredients all over the kitchen. Buckets of fillings, doughs, toppings, and batters line the walls of our walk-in cooler and kitchen area. For years, our labeling system has been a sharpie and a stack of blank labels. This works alright but does lead to inconsistencies. Plus, when you are staring at a wall of buckets, it can be difficult to read five different handwritings when trying to find what you are looking for.</p>
+<p>There are off-the-shelf systems you can buy to solve this problem. But like any piece of software these days, you don&rsquo;t actually own anything, and you are at the mercy of a subscription. On top of that, they lack customization, require internet connections, and have bulky hardware requirements.</p>
+<p>My goal was to build something compact, easy to update, easy to use, and most importantly, not egregiously expensive. Now, why the time crunch? Well, I live five hours from the bakery, and my visits are usually spread out. I had a trip home planned in two weeks and wanted to get this done and delivered. So, two weeks it is&mldr;</p>
+<hr>
+<h3 id=research>Research</h3>
+<p>I spent about a day researching different label printers. I eventually settled on a Zebra ZD421 for two main reasons: 1. It can print 4x3 labels that can easily be read from a distance. 2. I&rsquo;ve worked with Epson and Brother printers in the past, and I wanted to give the Zebra Programming Language (ZPL) a try to see how easy it is to use.</p>
+<h3 id=prototyping>Prototyping</h3>
+<figure class=center>
+<img src=/post-assets/label-maker/prototyping.png alt="Hello Friend" style=border-radius:10px;width:auto;height:auto>
+<figcaption class=center style=color:gray>A chaotic workbench</figcaption>
+</figure>
+<p>While waiting for the printer to arrive, I started working on the control software. I&rsquo;ve worked on a handful of projects building web apps using NodeJS, so I had lots of old code to help get me started. This ended up being a very simple single-page application. The list of items is stored as a JSON object in a DigitalOcean Space that the app downloads periodically. Here&rsquo;s an excerpt of the file:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>[
+  { <span style=color:#f92672>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;e5101c48-df94-4774-8841-7e5e82f1559e&#34;</span>, <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;Vanilla Custard&#34;</span> },
+  { <span style=color:#f92672>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;b7c916cb-b8f8-4f0e-a38f-0bb2dc56e6b5&#34;</span>, <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;Apple Pie Filling&#34;</span> },
+  { <span style=color:#f92672>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;9fcdd80f-1c3e-4b68-9f56-5932ee07c6fb&#34;</span>, <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;Lemon Filling&#34;</span> },
+  { <span style=color:#f92672>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;a818c0f7-13fb-49af-a4a1-45d67c30f2b1&#34;</span>, <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;White Buttercream&#34;</span> }
+]
+</code></pre></div><p>The list of items is presented using a single-column <a href=https://datatables.net/>DataTables</a>. When an item is selected, a tooltip appears to confirm you want to print. I had a spare Raspberry Pi 5 lying around not doing anything, so it got put to use running this little app. I also ordered the <a href=https://www.adafruit.com/product/2718>official 7" Raspberry Pi touchscreen from the wonderful people at Adafruit</a>. Once the printer arrived I could actually test the software and work out some formatting kinks.</p>
+<p>So, I had a printer and a simple app that could print to it. Now I needed a way to bundle it all together. I knew I wanted to wall-mount the entire system using a <a href="https://www.amazon.com/dp/B07KT13216?psc=1&ref=ppx_yo2ov_dt_b_product_details">standard VESA wall mount</a>, so I had to design everything around that.</p>
+<p>I needed to design two main parts:</p>
+<ol>
+<li>An enclosure to hold the Pi and touchscreen.</li>
+<li>A mounting adapter for the Zebra printer.</li>
+</ol>
+<p>3D printing is a newer hobby of mine, and CAD is not my strong suit, so I struggled my way around Fusion 360 and eventually came up with this.</p>
+<figure class=center>
+<img src=/post-assets/label-maker/CAD.PNG alt="Hello Friend" style=border-radius:10px;width:auto;height:auto>
+</figure>
+<p>On the left side is the mounting adapter for the printer. There are holes for <a href="https://www.amazon.com/dp/B0CN23ZKYN?psc=1&ref=ppx_yo2ov_dt_b_product_details">brass heat-set inserts</a> so I can screw the adapter onto the VESA mount. There are also holes so that I can screw the plate into the back of the printer.</p>
+<p>The box on the right has an 80mm fan hole on the bottom and ventilation holes on the sides. All the holes would be covered with mesh to filter out dust. On the back, there are holes that align with the VESA mount. The lid has an opening to accommodate a <a href=https://www.thingiverse.com/thing:1585924/remixes>Raspberry Pi touchscreen mount I found on Thingiverse</a>. The lid screws into the box with more brass heat-set inserts.</p>
+<h3 id=assembly-time>Assembly time&mldr;</h3>
+<p>The assembly was all done at the 11th hour. I wanted to spend a little more time on it, but I literally had to leave the next morning, so there wasn&rsquo;t any more time to work with. The biggest problem was that the enclosure took ~12 hours to print using a 0.6mm nozzle on a Prusa MK4. Because I was out of time, I only had one chance to print, and of course, the box warped, which made it a little harder to work with.</p>
+<p>Anyway&mldr; I crammed an 80mm fan and power supplies for the Pi and the printer into the box and worked some zip-tie magic. USB and power for the printer pass through one of the ventilation holes on the top right. I mounted the adapter plate to the printer and mounted everything onto the VESA mount. Did a quick shake test to make sure it didn&rsquo;t fall apart, and then deemed it good enough for production use. :D</p>
+<figure class=center>
+<img src=/post-assets/label-maker/assembly_angle.png alt="Hello Friend" style=border-radius:10px;width:auto;height:600px>
+</figure>
+<figure class=center>
+<img src=/post-assets/label-maker/rear.png alt="Hello Friend" style=border-radius:10px;width:auto;height:600px>
+</figure>
+<h3 id=results>Results!</h3>
+<figure class=center>
+<img src=/post-assets/label-maker/final.png alt="Hello Friend" style=border-radius:10px;width:auto;height:700px>
+</figure>
+<div style=display:flex;justify-content:center;gap:20px>
+<figure class=left>
+<img src=/post-assets/label-maker/before.png alt="Hello Friend" style=border-radius:10px;width:auto;height:450px>
+<figcaption class=center style=color:gray>Before&mldr;</figcaption>
+</figure>
+<figure class=left>
+<img src=/post-assets/label-maker/after.png alt="Hello Friend" style=border-radius:10px;width:auto;height:450px>
+<figcaption class=center style=color:gray>After&mldr;</figcaption>
+</figure>
+</div>
+</div>
+<div class=pagination>
+<div class=pagination__title>
+<span class=pagination__title-h>Read other posts</span>
+<hr>
+</div>
+<div class=pagination__buttons>
+<span class="button next">
+<a href=https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/>
+<span class=button__text>ESXi Cluster - Part 1</span>
+<span class=button__icon>→</span>
+</a>
+</span>
+</div>
+</div>
+</div>
+</div>
+<footer class=footer>
+<div class=footer__inner>
+<a href=/ class=logo style=text-decoration:none>
+<span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg>
+</span>
+<span class=logo__text>organized_chaos</span>
+<span class=logo__cursor></span>
+</a>
+<div class=copyright>
+<span>© 2024 Powered by
+<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a></span>
+<span>Theme created by
+<a href=https://twitter.com/panr target=_blank rel=noopener>panr</a></span>
+</div>
+</div>
+</footer>
+<script src=https://blog.organizedchaos.tech/assets/main.js></script>
+<script src=https://blog.organizedchaos.tech/assets/prism.js></script>
+</div>
+</body>
+</html>
