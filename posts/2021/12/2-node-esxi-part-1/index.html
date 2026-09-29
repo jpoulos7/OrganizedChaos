@@ -33,8 +33,9 @@ Part 1 of this series will focus on specs, cabling, and IPMI configuration.">
 <meta property="og:url" content="https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2021-12-11T18:39:50-05:00">
 <meta property="article:modified_time" content="2021-12-11T18:39:50-05:00"><meta property="og:site_name" content="Organized Chaos">
+<link rel=stylesheet href=https://blog.organizedchaos.tech/posts-index.css>
 </head>
-<body class=dark-theme>
+<body>
 <div class=container>
 <header class=header>
 <span class=header__inner>
@@ -47,9 +48,11 @@ Part 1 of this series will focus on specs, cabling, and IPMI configuration.">
 <span class=header__right>
 <nav class=menu>
 <ul class="menu__inner menu__inner--desktop">
+<li><a href=/posts/>Posts</a></li>
 <li><a href=/about>About</a></li>
 </ul>
 <ul class="menu__inner menu__inner--mobile">
+<li><a href=/posts/>Posts</a></li>
 <li><a href=/about>About</a></li>
 </ul>
 </nav>
@@ -74,6 +77,14 @@ Part 1 of this series will focus on specs, cabling, and IPMI configuration.">
 <img src=https://blog.organizedchaos.tech/covers/supermicro_t.png alt="ESXi Cluster - Part 1">
 </figure>
 <div class=post-content>
+<h2>Table of Contents</h2>
+<aside class=table-of-contents><nav id=TableOfContents>
+<ul>
+<li><a href=#specs>Specs</a></li>
+<li><a href=#cabling>Cabling</a></li>
+<li><a href=#ipmi-configuration>IPMI Configuration</a></li>
+</ul>
+</nav></aside>
 <p>A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!</p>
 <p>Part 1 of this series will focus on specs, cabling, and IPMI configuration.</p>
 <h2 id=specs>Specs</h2>
@@ -196,7 +207,7 @@ admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN sol a
 <span class=logo__cursor></span>
 </a>
 <div class=copyright>
-<span>© 2024 Powered by
+<span>© 2026 Powered by
 <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a></span>
 <span>Theme created by
 <a href=https://twitter.com/panr target=_blank rel=noopener>panr</a></span>
