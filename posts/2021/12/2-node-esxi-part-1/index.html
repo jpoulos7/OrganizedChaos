@@ -1,122 +1,12 @@
-<!doctype html><html lang=en>
-<head>
-<title>
-ESXi Cluster - Part 1 ::
-Organized Chaos
-</title>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content="A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!
-Part 1 of this series will focus on specs, cabling, and IPMI configuration.
-">
-<meta name=keywords content>
-<meta name=robots content="noodp">
-<link rel=canonical href=https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/>
-<link rel=stylesheet href=https://blog.organizedchaos.tech/assets/style.css>
-<link rel=stylesheet href=https://blog.organizedchaos.tech/style.css>
-<link rel=apple-touch-icon-precomposed sizes=144x144 href=https://blog.organizedchaos.tech/img/apple-touch-icon-144-precomposed.png>
-<link rel="shortcut icon" href=https://blog.organizedchaos.tech/img/favicon.png>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Italic.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Regular.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Medium.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-MediumItalic.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Bold.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-BoldItalic.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="ESXi Cluster - Part 1">
-<meta name=twitter:description content="A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!
-Part 1 of this series will focus on specs, cabling, and IPMI configuration.">
-<meta property="og:title" content="ESXi Cluster - Part 1">
-<meta property="og:description" content="A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!
-Part 1 of this series will focus on specs, cabling, and IPMI configuration.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2021-12-11T18:39:50-05:00">
-<meta property="article:modified_time" content="2021-12-11T18:39:50-05:00"><meta property="og:site_name" content="Organized Chaos">
-<link rel=stylesheet href=https://blog.organizedchaos.tech/posts-index.css>
-</head>
-<body>
-<div class=container>
-<header class=header>
-<span class=header__inner>
-<a href=/ class=logo style=text-decoration:none>
-<span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg>
-</span>
-<span class=logo__text>organized_chaos</span>
-<span class=logo__cursor></span>
-</a>
-<span class=header__right>
-<nav class=menu>
-<ul class="menu__inner menu__inner--desktop">
-<li><a href=/posts/>Posts</a></li>
-<li><a href=/about>About</a></li>
-</ul>
-<ul class="menu__inner menu__inner--mobile">
-<li><a href=/posts/>Posts</a></li>
-<li><a href=/about>About</a></li>
-</ul>
-</nav>
-<span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-</span>
-<span class=theme-toggle><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41c10.4934.0 19-8.5066 19-19C41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg>
-</span>
-</span>
-</span>
-</header>
-<div class=content>
-<div class=post>
-<h1 class=post-title>ESXi Cluster - Part 1</h1>
-<div class=post-meta>
-<span class=post-date>
-2021-12-11
-</span>
-<span class=post-author>— Written by jp</span>
-<span class=post-read-time>— 4 min read</span>
-</div>
-<figure class=post-cover>
-<img src=https://blog.organizedchaos.tech/covers/supermicro_t.png alt="ESXi Cluster - Part 1">
-</figure>
-<div class=post-content>
-<h2>Table of Contents</h2>
-<aside class=table-of-contents><nav id=TableOfContents>
-<ul>
-<li><a href=#specs>Specs</a></li>
-<li><a href=#cabling>Cabling</a></li>
-<li><a href=#ipmi-configuration>IPMI Configuration</a></li>
-</ul>
-</nav></aside>
-<p>A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!</p>
-<p>Part 1 of this series will focus on specs, cabling, and IPMI configuration.</p>
-<h2 id=specs>Specs</h2>
-<ul>
-<li>Supermicro 2U, 16 Bay chassis</li>
-<li>Motherboard: <a href=https://www.supermicro.com/products/motherboard/xeon/c600/x9drw-7tpf_.cfm>Supermicro X9DRW-7TPF+</a></li>
-<li>CPU: Dual <a href=https://ark.intel.com/content/www/us/en/ark/products/75281/intel-xeon-processor-e52695-v2-30m-cache-2-40-ghz.html>Intel Xeon E5-2695v2</a> 12C/24T @ 2.40GHZ base</li>
-<li>RAM: 328GB Registered-ECC (10 16GB DIMM&rsquo;s per CPU)</li>
-<li>Network: Dual 10GB SFP+ (Intel 82599EB Controller)</li>
-<li>HBA: <a href=https://storage.microsemi.com/en-us/support/raid/sas_raid/sas-71605/>Adaptec RAID 71605</a></li>
-<li>Drives: 14 Seagate 10K SAS & 2 Intel 128GB SSD DC S3500 Series (w/ MLC flash).</li>
-<li>Boot Drive: 256GB Samsung SSD</li>
-</ul>
-<hr>
-<h2 id=cabling>Cabling</h2>
-<p>I tried to keep the cabling as simple as possible. From left to right&mldr;</p>
-<ul>
-<li>IPMI</li>
-<li>ESXi Management Interface</li>
-<li>10GbE uplink to Edgeswitch 48-lite (VM Traffic)</li>
-<li>10GbE DAC to the other Supermicro sever (vSAN & vMotion)</li>
-</ul>
-<img src=/post-assets/2-node-esxi-part-1/supermicro_rear.png alt="Server rear cabling view" class=center style=border-radius:10px>
-<hr>
-<h2 id=ipmi-configuration>IPMI Configuration</h2>
-<p>Even though these servers sit 5 feet away from my desk, I still wanted to be able to manage them without having to use a physical KVM. The first thing to do is configure the IPMI interfaces.</p>
-<p>On my Edgerouter-4 I have a virtual interface configured for the Out-of-Band (OOB) network on vlan 2286</p>
-<pre tabindex=0><code>ubnt@er-4# show interfaces ethernet eth1 vif 2286
+<!doctype html><html lang=en dir=auto data-theme=light><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>ESXi Cluster - Part 1 | OrganizedChaos</title><meta name=keywords content><meta name=description content="A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!
+Part 1 of this series will focus on specs, cabling, and IPMI configuration."><meta name=author content="jp"><link rel=canonical href=https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/><link crossorigin=anonymous href=/assets/css/stylesheet.9febe811275889917d4a563ecfba9259f640e55ea8d23b4cb214dc773786a0af.css integrity="sha256-n+voESdYiZF9SlY+z7qSWfZA5V6o0jtMshTcdzeGoK8=" rel="preload stylesheet" as=style><link rel=icon href=https://blog.organizedchaos.tech/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://blog.organizedchaos.tech/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://blog.organizedchaos.tech/favicon-32x32.png><link rel=apple-touch-icon href=https://blog.organizedchaos.tech/apple-touch-icon.png><link rel=mask-icon href=https://blog.organizedchaos.tech/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/><noscript><style>#theme-toggle,.top-link{display:none}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"&&(document.querySelector("html").dataset.theme="dark")</script><meta property="og:url" content="https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/"><meta property="og:site_name" content="OrganizedChaos"><meta property="og:title" content="ESXi Cluster - Part 1"><meta property="og:description" content="A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!
+Part 1 of this series will focus on specs, cabling, and IPMI configuration."><meta property="og:locale" content="en_US"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-12-11T18:39:50-05:00"><meta property="article:modified_time" content="2021-12-11T18:39:50-05:00"><meta property="og:image" content="https://blog.organizedchaos.tech/covers/supermicro_t.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.organizedchaos.tech/covers/supermicro_t.png"><meta name=twitter:title content="ESXi Cluster - Part 1"><meta name=twitter:description content="A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!
+Part 1 of this series will focus on specs, cabling, and IPMI configuration."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://blog.organizedchaos.tech/posts/"},{"@type":"ListItem","position":2,"name":"ESXi Cluster - Part 1","item":"https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"ESXi Cluster - Part 1","name":"ESXi Cluster - Part 1","description":"A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!\nPart 1 of this series will focus on specs, cabling, and IPMI configuration.\n","keywords":[],"articleBody":"A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!\nPart 1 of this series will focus on specs, cabling, and IPMI configuration.\nSpecs Supermicro 2U, 16 Bay chassis Motherboard: Supermicro X9DRW-7TPF+ CPU: Dual Intel Xeon E5-2695v2 12C/24T @ 2.40GHZ base RAM: 328GB Registered-ECC (10 16GB DIMM’s per CPU) Network: Dual 10GB SFP+ (Intel 82599EB Controller) HBA: Adaptec RAID 71605 Drives: 14 Seagate 10K SAS \u0026 2 Intel 128GB SSD DC S3500 Series (w/ MLC flash). Boot Drive: 256GB Samsung SSD Cabling I tried to keep the cabling as simple as possible. From left to right…\nIPMI ESXi Management Interface 10GbE uplink to Edgeswitch 48-lite (VM Traffic) 10GbE DAC to the other Supermicro sever (vSAN \u0026 vMotion) IPMI Configuration Even though these servers sit 5 feet away from my desk, I still wanted to be able to manage them without having to use a physical KVM. The first thing to do is configure the IPMI interfaces.\nOn my Edgerouter-4 I have a virtual interface configured for the Out-of-Band (OOB) network on vlan 2286\nubnt@er-4# show interfaces ethernet eth1 vif 2286 address 10.1.2.1/26 description OOB I also have a DHCP server setup to hand out leases on the OOB network. Trust me, it’s way easier than fumbling around with static IP’s.\nubnt@er-4# show service dhcp-server shared-network-name OOB authoritative disable subnet 10.1.2.0/26 { default-router 10.1.2.1 dns-server 10.1.3.4 lease 86400 start 10.1.2.3 { stop 10.1.2.10 } } The IPMI interfaces on the back of each server are connected to interfaces 0/9 and 0/10 on my Edgeswitch 48 lite. The switchport configs look like this:\ninterface 0/9 description 'Top IPMI' ip dhcp snooping trust ipv6 dhcp snooping trust mtu 9216 vlan pvid 2286 vlan participation exclude 1,2280,2282-2285,2287,2290-2294 vlan participation include 2286 ! interface 0/10 description 'Bottom IPMI' ip dhcp snooping trust ipv6 dhcp snooping trust mtu 9216 vlan pvid 2286 vlan participation exclude 1,2280,2282-2285,2287,2290-2294 vlan participation include 2286 exit Now each server is pulling a DHCP lease!\nubnt@er-4:~$ show dhcp leases IP address Hardware Address Lease expiration Pool ---------- ---------------- ---------------- ---- 10.1.2.3 XX:XX:XX:XX:XX:26 2021/12/12 05:51:35 OOB 10.1.2.4 XX:XX:XX:XX:XX:a2 2021/12/12 05:51:35 OOB Now that the IPMI network is configured, I can use ipmitool to manipulate and also get information from the servers. Here are some examples:\nadmin@OrganizedChaos\u003e ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis power status Chassis Power is off admin@OrganizedChaos\u003e ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis bootparam set bootflag force_bios Set Boot Device to force_bios admin@OrganizedChaos\u003e ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis power on Chassis Power Control: Up/On admin@OrganizedChaos\u003e ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN sdr type Temperature | grep CPU CPU1 Temp | 01h | ok | 3.1 | 44 degrees C CPU2 Temp | 02h | ok | 3.2 | 52 degrees C admin@OrganizedChaos\u003e ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN sdr type \"Power Supply\" PS1 Status | C8h | ok | 10.1 | Presence detected PS2 Status | C9h | ok | 10.2 | Presence detected There are 2 choices for gaining “KVM-like” access to the servers. The first option is a Java Virtual KVM client available, but using it is clunky and requires downloading a java applet every time I need to use it (It also requires a few overrides in the Java security control panel). The second option is the Serial-Over-LAN (SOL) console. Since the SOL console is not enabled by default, I had to change a couple of BIOS settings to get it working:\n- Advanced -\u003e Super IO Configuration -\u003e Serial Port 2 Configuration -\u003e Serial Port 2 Attribute [SOL] - Advanced -\u003e Serial Port Console Redirection -\u003e COM2 Console Redirection [Enabled] Now I can power the server on, wait a few seconds, and then connect to the SOL console.\nadmin@OrganizedChaos\u003e ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis power on Chassis Power Control: Up/On admin@OrganizedChaos\u003e ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN sol activate Works like a charm; I have full access to the server without having to plug in a monitor and keyboard!\nIn part 2 I will install ESXi, configure the ESXi management network, and install the Adaptec drivers.\n","wordCount":"715","inLanguage":"en","image":"https://blog.organizedchaos.tech/covers/supermicro_t.png","datePublished":"2021-12-11T18:39:50-05:00","dateModified":"2021-12-11T18:39:50-05:00","author":{"@type":"Person","name":"jp"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/"},"publisher":{"@type":"Organization","name":"OrganizedChaos","logo":{"@type":"ImageObject","url":"https://blog.organizedchaos.tech/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://blog.organizedchaos.tech/ accesskey=h title="OrganizedChaos (Alt + H)">OrganizedChaos</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://blog.organizedchaos.tech/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://blog.organizedchaos.tech/about/ title=About><span>About</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent">ESXi Cluster - Part 1</h1><div class=post-meta><span title='2021-12-11 18:39:50 -0500 -0500'>2021-12-11</span>&nbsp;·&nbsp;<span>4 min</span>&nbsp;·&nbsp;<span>jp</span></div></header><figure class=entry-cover><img loading=eager src=https://blog.organizedchaos.tech/covers/supermicro_t.png alt></figure><details class=toc open><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#specs aria-label=Specs>Specs</a></li><li><a href=#cabling aria-label=Cabling>Cabling</a></li><li><a href=#ipmi-configuration aria-label="IPMI Configuration">IPMI Configuration</a></li></ul></div></details><div class="post-content md-content"><p>A few months ago a friend of mine was offloading some old(er) 2U Supermicro Servers. I decided to grab a couple and turn them into a 2-node ESXi cluster!</p><p>Part 1 of this series will focus on specs, cabling, and IPMI configuration.</p><h2 id=specs>Specs<a hidden class=anchor aria-hidden=true href=#specs>#</a></h2><ul><li>Supermicro 2U, 16 Bay chassis</li><li>Motherboard: <a href=https://www.supermicro.com/products/motherboard/xeon/c600/x9drw-7tpf_.cfm>Supermicro X9DRW-7TPF+</a></li><li>CPU: Dual <a href=https://ark.intel.com/content/www/us/en/ark/products/75281/intel-xeon-processor-e52695-v2-30m-cache-2-40-ghz.html>Intel Xeon E5-2695v2</a> 12C/24T @ 2.40GHZ base</li><li>RAM: 328GB Registered-ECC (10 16GB DIMM&rsquo;s per CPU)</li><li>Network: Dual 10GB SFP+ (Intel 82599EB Controller)</li><li>HBA: <a href=https://storage.microsemi.com/en-us/support/raid/sas_raid/sas-71605/>Adaptec RAID 71605</a></li><li>Drives: 14 Seagate 10K SAS & 2 Intel 128GB SSD DC S3500 Series (w/ MLC flash).</li><li>Boot Drive: 256GB Samsung SSD</li></ul><hr><h2 id=cabling>Cabling<a hidden class=anchor aria-hidden=true href=#cabling>#</a></h2><p>I tried to keep the cabling as simple as possible. From left to right&mldr;</p><ul><li>IPMI</li><li>ESXi Management Interface</li><li>10GbE uplink to Edgeswitch 48-lite (VM Traffic)</li><li>10GbE DAC to the other Supermicro sever (vSAN & vMotion)</li></ul><img src=/post-assets/2-node-esxi-part-1/supermicro_rear.png alt="Server rear cabling view" class=center style=border-radius:10px><hr><h2 id=ipmi-configuration>IPMI Configuration<a hidden class=anchor aria-hidden=true href=#ipmi-configuration>#</a></h2><p>Even though these servers sit 5 feet away from my desk, I still wanted to be able to manage them without having to use a physical KVM. The first thing to do is configure the IPMI interfaces.</p><p>On my Edgerouter-4 I have a virtual interface configured for the Out-of-Band (OOB) network on vlan 2286</p><pre tabindex=0><code>ubnt@er-4# show interfaces ethernet eth1 vif 2286
  address 10.1.2.1/26
  description OOB
-</code></pre><p>I also have a DHCP server setup to hand out leases on the OOB network. Trust me, it&rsquo;s way easier than fumbling around with static IP&rsquo;s.</p>
-<pre tabindex=0><code>ubnt@er-4# show service dhcp-server shared-network-name OOB
+</code></pre><p>I also have a DHCP server setup to hand out leases on the OOB network. Trust me, it&rsquo;s way easier than fumbling around with static IP&rsquo;s.</p><pre tabindex=0><code>ubnt@er-4# show service dhcp-server shared-network-name OOB
  authoritative disable
  subnet 10.1.2.0/26 {
      default-router 10.1.2.1
@@ -126,9 +16,8 @@ Part 1 of this series will focus on specs, cabling, and IPMI configuration.">
          stop 10.1.2.10
      }
  }
-</code></pre><p>The IPMI interfaces on the back of each server are connected to interfaces 0/9 and 0/10 on my Edgeswitch 48 lite. The switchport configs look like this:</p>
-<pre tabindex=0><code>interface 0/9
-description 'Top IPMI'
+</code></pre><p>The IPMI interfaces on the back of each server are connected to interfaces 0/9 and 0/10 on my Edgeswitch 48 lite. The switchport configs look like this:</p><pre tabindex=0><code>interface 0/9
+description &#39;Top IPMI&#39;
 ip dhcp snooping trust
 ipv6 dhcp snooping trust
 mtu 9216
@@ -137,7 +26,7 @@ vlan participation exclude 1,2280,2282-2285,2287,2290-2294
 vlan participation include 2286
 !
 interface 0/10
-description 'Bottom IPMI'
+description &#39;Bottom IPMI&#39;
 ip dhcp snooping trust
 ipv6 dhcp snooping trust
 mtu 9216
@@ -145,14 +34,12 @@ vlan pvid 2286
 vlan participation exclude 1,2280,2282-2285,2287,2290-2294
 vlan participation include 2286
 exit
-</code></pre><p>Now each server is pulling a DHCP lease!</p>
-<pre tabindex=0><code>ubnt@er-4:~$ show dhcp leases
+</code></pre><p>Now each server is pulling a DHCP lease!</p><pre tabindex=0><code>ubnt@er-4:~$ show dhcp leases
 IP address      Hardware Address   Lease expiration     Pool
 ----------      ----------------   ----------------     ----
 10.1.2.3        XX:XX:XX:XX:XX:26  2021/12/12 05:51:35  OOB
 10.1.2.4        XX:XX:XX:XX:XX:a2  2021/12/12 05:51:35  OOB
-</code></pre><p>Now that the IPMI network is configured, I can use <code>ipmitool</code> to manipulate and also get information from the servers. Here are some examples:</p>
-<pre tabindex=0><code>admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis power status
+</code></pre><p>Now that the IPMI network is configured, I can use <code>ipmitool</code> to manipulate and also get information from the servers. Here are some examples:</p><pre tabindex=0><code>admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis power status
 Chassis Power is off
 admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis bootparam set bootflag force_bios
 Set Boot Device to force_bios
@@ -161,61 +48,16 @@ Chassis Power Control: Up/On
 admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN sdr type Temperature | grep CPU
 CPU1 Temp        | 01h | ok  |  3.1 | 44 degrees C
 CPU2 Temp        | 02h | ok  |  3.2 | 52 degrees C
-admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN sdr type &quot;Power Supply&quot;
+admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN sdr type &#34;Power Supply&#34;
 PS1 Status       | C8h | ok  | 10.1 | Presence detected
 PS2 Status       | C9h | ok  | 10.2 | Presence detected
-</code></pre><p>There are 2 choices for gaining &ldquo;KVM-like&rdquo; access to the servers. The first option is a Java Virtual KVM client available, but using it is clunky and requires downloading a java applet every time I need to use it (It also requires a few overrides in the Java security control panel). The second option is the Serial-Over-LAN (SOL) console. Since the SOL console is not enabled by default, I had to change a couple of BIOS settings to get it working:</p>
-<pre tabindex=0><code>- Advanced -&gt; Super IO Configuration -&gt; Serial Port 2 Configuration -&gt; Serial Port 2 Attribute [SOL]
+</code></pre><p>There are 2 choices for gaining &ldquo;KVM-like&rdquo; access to the servers. The first option is a Java Virtual KVM client available, but using it is clunky and requires downloading a java applet every time I need to use it (It also requires a few overrides in the Java security control panel). The second option is the Serial-Over-LAN (SOL) console. Since the SOL console is not enabled by default, I had to change a couple of BIOS settings to get it working:</p><pre tabindex=0><code>- Advanced -&gt; Super IO Configuration -&gt; Serial Port 2 Configuration -&gt; Serial Port 2 Attribute [SOL]
 - Advanced -&gt; Serial Port Console Redirection -&gt; COM2 Console Redirection [Enabled]
-</code></pre><p>Now I can power the server on, wait a few seconds, and then connect to the SOL console.</p>
-<pre tabindex=0><code>admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis power on
+</code></pre><p>Now I can power the server on, wait a few seconds, and then connect to the SOL console.</p><pre tabindex=0><code>admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN chassis power on
 Chassis Power Control: Up/On
 admin@OrganizedChaos&gt; ipmitool -I lanplus -H 10.1.2.3 -U ADMIN -P ADMIN sol activate
-</code></pre><p>Works like a charm; I have full access to the server without having to plug in a monitor and keyboard!</p>
-<img src=/post-assets/2-node-esxi-part-1/sol-demo.gif alt="Hello Friend" class=center style=border-radius:10px>
-<hr>
-<p>In part 2 I will install ESXi, configure the ESXi management network, and install the Adaptec drivers.</p>
-</div>
-<div class=pagination>
-<div class=pagination__title>
-<span class=pagination__title-h>Read other posts</span>
-<hr>
-</div>
-<div class=pagination__buttons>
-<span class="button previous">
-<a href=https://blog.organizedchaos.tech/posts/2024/06/label-maker/>
-<span class=button__icon>←</span>
-<span class=button__text>Labels Made Easy</span>
-</a>
-</span>
-<span class="button next">
-<a href=https://blog.organizedchaos.tech/posts/2021/11/pi-pico-first/>
-<span class=button__text>Raspberry Pi Pico Temperature Sensor</span>
-<span class=button__icon>→</span>
-</a>
-</span>
-</div>
-</div>
-</div>
-</div>
-<footer class=footer>
-<div class=footer__inner>
-<a href=/ class=logo style=text-decoration:none>
-<span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg>
-</span>
-<span class=logo__text>organized_chaos</span>
-<span class=logo__cursor></span>
-</a>
-<div class=copyright>
-<span>© 2026 Powered by
-<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a></span>
-<span>Theme created by
-<a href=https://twitter.com/panr target=_blank rel=noopener>panr</a></span>
-</div>
-</div>
-</footer>
-<script src=https://blog.organizedchaos.tech/assets/main.js></script>
-<script src=https://blog.organizedchaos.tech/assets/prism.js></script>
-</div>
-</body>
-</html>
+</code></pre><p>Works like a charm; I have full access to the server without having to plug in a monitor and keyboard!</p><img src=/post-assets/2-node-esxi-part-1/sol-demo.gif alt="Hello Friend" class=center style=border-radius:10px><hr><p>In part 2 I will install ESXi, configure the ESXi management network, and install the Adaptec drivers.</p></div><footer class=post-footer><ul class=post-tags></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://blog.organizedchaos.tech/>OrganizedChaos</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>

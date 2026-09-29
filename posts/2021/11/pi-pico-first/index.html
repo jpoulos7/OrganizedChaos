@@ -1,223 +1,62 @@
-<!doctype html><html lang=en>
-<head>
-<title>
-Raspberry Pi Pico Temperature Sensor ::
-Organized Chaos
-</title>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content="For only $4 I couldn&amp;rsquo;t pass up the opportunity to tinker with the new(ish) Raspberry Pi Pico!
-">
-<meta name=keywords content>
-<meta name=robots content="noodp">
-<link rel=canonical href=https://blog.organizedchaos.tech/posts/2021/11/pi-pico-first/>
-<link rel=stylesheet href=https://blog.organizedchaos.tech/assets/style.css>
-<link rel=stylesheet href=https://blog.organizedchaos.tech/style.css>
-<link rel=apple-touch-icon-precomposed sizes=144x144 href=https://blog.organizedchaos.tech/img/apple-touch-icon-144-precomposed.png>
-<link rel="shortcut icon" href=https://blog.organizedchaos.tech/img/favicon.png>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Italic.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Regular.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Medium.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-MediumItalic.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-Bold.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<link href=https://blog.organizedchaos.tech/assets/fonts/Inter-BoldItalic.woff2 rel=preload type=font/woff2 as=font crossorigin>
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="Raspberry Pi Pico Temperature Sensor">
-<meta name=twitter:description content="For only $4 I couldn&rsquo;t pass up the opportunity to tinker with the new(ish) Raspberry Pi Pico!">
-<meta property="og:title" content="Raspberry Pi Pico Temperature Sensor">
-<meta property="og:description" content="For only $4 I couldn&rsquo;t pass up the opportunity to tinker with the new(ish) Raspberry Pi Pico!">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://blog.organizedchaos.tech/posts/2021/11/pi-pico-first/"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2021-11-21T08:26:48-05:00">
-<meta property="article:modified_time" content="2021-11-21T08:26:48-05:00"><meta property="og:site_name" content="Organized Chaos">
-<link rel=stylesheet href=https://blog.organizedchaos.tech/posts-index.css>
-</head>
-<body>
-<div class=container>
-<header class=header>
-<span class=header__inner>
-<a href=/ class=logo style=text-decoration:none>
-<span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg>
-</span>
-<span class=logo__text>organized_chaos</span>
-<span class=logo__cursor></span>
-</a>
-<span class=header__right>
-<nav class=menu>
-<ul class="menu__inner menu__inner--desktop">
-<li><a href=/posts/>Posts</a></li>
-<li><a href=/about>About</a></li>
-</ul>
-<ul class="menu__inner menu__inner--mobile">
-<li><a href=/posts/>Posts</a></li>
-<li><a href=/about>About</a></li>
-</ul>
-</nav>
-<span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-</span>
-<span class=theme-toggle><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41c10.4934.0 19-8.5066 19-19C41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg>
-</span>
-</span>
-</span>
-</header>
-<div class=content>
-<div class=post>
-<h1 class=post-title>Raspberry Pi Pico Temperature Sensor</h1>
-<div class=post-meta>
-<span class=post-date>
-2021-11-21
-</span>
-<span class=post-author>— Written by jp</span>
-<span class=post-read-time>— 3 min read</span>
-</div>
-<figure class=post-cover>
-<img src=https://blog.organizedchaos.tech/covers/pi-pico-first.png alt="Raspberry Pi Pico Temperature Sensor">
-</figure>
-<div class=post-content>
-<h2>Table of Contents</h2>
-<aside class=table-of-contents><nav id=TableOfContents>
-<ul>
-<li><a href=#parts-list>Parts list:</a></li>
-<li><a href=#wiring>Wiring:</a></li>
-<li><a href=#installing-circuitpython>Installing CircuitPython:</a></li>
-<li><a href=#code>Code!</a></li>
-<li><a href=#backlight-toggle>Backlight Toggle:</a></li>
-<li><a href=#conclusion>Conclusion:</a></li>
-</ul>
-</nav></aside>
-<p>For only $4 I couldn&rsquo;t pass up the opportunity to tinker with the new(ish) Raspberry Pi Pico!</p>
-<p>I had all these parts laying around already, so I decided to create a standalone temperature and humidity sensor.</p>
-<h2 id=parts-list>Parts list:</h2>
-<p>Here is everything that I used&mldr;</p>
-<ol>
-<li><a href=https://www.adafruit.com/product/4864>Raspberry Pi Pico RP2040</a></li>
-<li><a href=https://www.adafruit.com/product/385>DHT-22 Temperature & Humidity Sensor</a></li>
-<li><a href=https://www.adafruit.com/product/181>16x2 Character LCD</a></li>
-<li><a href=https://www.adafruit.com/product/292>i2c character LCD backpack</a></li>
-<li><a href=https://www.adafruit.com/product/805>SPDT Slide Switch</a></li>
-<li><a href=https://www.adafruit.com/product/1609>Perma-Proto Half-Sized Breadboard</a>
-<ol>
-<li>This can also be done on a breadboard, but I needed some soldering practice so I opted for the Perma-Proto board.</li>
-</ol>
-</li>
-<li>16k Resistor</li>
-</ol>
-<h2 id=wiring>Wiring:</h2>
-<p>This is how I wired everything together on the Perma-Proto board&mldr;
-<figure class=center>
-<img src=/post-assets/pi-pico-first/pico-temp.PNG alt="Pi Wiring Diagram" style=border-radius:8px>
-<figcaption class=center style=color:gray>My first attempt at using Fritzing to create a wiring diagram&mldr; Not the prettiest but it gets the job done</figcaption>
-</figure>
-</p>
-<h2 id=installing-circuitpython>Installing CircuitPython:</h2>
-<p>Once everything was soldered together, I flashed the Pico with CircuitPython. In order to do this I grabbed a copy of the latest <a href=https://circuitpython.org/board/raspberry_pi_pico/>CircuitPython UF2 file</a>. Then I held the BOOTSEL button on the Pico as I plugged it into my PC via USB. This made the Pico appear as a mass storage device. Then I dragged the UF2 onto the Pico and waited a couple of seconds for it to restart.</p>
-<p>The Pico mounted as a mass storage device again, but now it had a few more files on it. The only one I cared about was <code>code.py</code>.</p>
-<h2 id=code>Code!</h2>
-<p>This is the code I ended up using, it&rsquo;s a hacked together combination of sample code for both the <a href=https://learn.adafruit.com/dht/dht-circuitpython-code#example-code-2980244-19>DHT22</a> and the <a href=https://learn.adafruit.com/i2c-spi-lcd-backpack/python-circuitpython#full-example-code-3007416-21>i2c 16x2 character LCD</a>.</p>
-<div class=collapsable-code>
-<input id=1 type=checkbox>
-<label for=1>
-<span class=collapsable-code__language>python</span>
-<span class=collapsable-code__title>code.py</span>
-<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span>
-</label>
-<pre class=language-python><code>
-import time
-import board
-import busio
-import adafruit_character_lcd.character_lcd_i2c as character_lcd
-import adafruit_dht
-import digitalio
-import os
-import sys
-
-lcd_columns = 16
-lcd_rows = 2
-
-# Initialize I2C bus.
-i2c = busio.I2C(board.GP1, board.GP0)
-
-# Initialize the lcd class
-lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
-dht = adafruit_dht.DHT22(board.GP2)
-
-# Setup the backlight toggle switch
-button1 = digitalio.DigitalInOut(board.GP16)
-button1.direction = digitalio.Direction.INPUT
-button1.pull = digitalio.Pull.UP
-
-#Turn backlight on
-lcd.backlight = True
-while True:      
-    try:
-        # Check if the backlight should be on or off
-        if button1.value:
-            lcd.backlight = True
-        else:
-            lcd.backlight = False
-
-        # Get the temperature in C
-        temperature_c = dht.temperature
-        # Convert to Freedom Units
-        temperature_f = temperature_c * (9 / 5) &#43; 32
-        # Get the humidity
-        humidity = dht.humidity
-
-        # Write the results to the character LCD
-        lcd.message = 
-            &#34;Temp: {:.1f} F\nHumidity: {}% &#34;.format(temperature_f, temperature_c, humidity)
- 
-    except RuntimeError as error:
-        # Errors happen fairly often, DHT&#39;s are hard to read, just keep going
-        print(error.args[0])
-        time.sleep(0.2)
-        continue
-    except Exception as error:
-        # Catch a crazy failure
-        dht.exit()
-        raise error
-    time.sleep(2.2)
-</code></pre>
-</div>
-<h2 id=backlight-toggle>Backlight Toggle:</h2>
-<p>I wired up the slide switch so I can easily toggle the LCD backlight on and off. Each time the loop runs, it checks for the state of the switch, and then sets the state of the backlight. This is somewhat clunky (and also causes a delay when toggling the backlight), but CircuitPython does not support user-written interrupts, so this is the best I could do.</p>
-<h2 id=conclusion>Conclusion:</h2>
-<p>With this project I achieved what I set out to do, create something useful and learn more about the Raspberry Pi Pico. Hopefully you learned something too!</p>
-</div>
-<div class=pagination>
-<div class=pagination__title>
-<span class=pagination__title-h>Read other posts</span>
-<hr>
-</div>
-<div class=pagination__buttons>
-<span class="button previous">
-<a href=https://blog.organizedchaos.tech/posts/2021/12/2-node-esxi-part-1/>
-<span class=button__icon>←</span>
-<span class=button__text>ESXi Cluster - Part 1</span>
-</a>
-</span>
-</div>
-</div>
-</div>
-</div>
-<footer class=footer>
-<div class=footer__inner>
-<a href=/ class=logo style=text-decoration:none>
-<span class=logo__mark><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44"><path fill="none" d="M15 8l14.729 14.382L15 35.367"/></svg>
-</span>
-<span class=logo__text>organized_chaos</span>
-<span class=logo__cursor></span>
-</a>
-<div class=copyright>
-<span>© 2026 Powered by
-<a href=https://gohugo.io target=_blank rel=noopener>Hugo</a></span>
-<span>Theme created by
-<a href=https://twitter.com/panr target=_blank rel=noopener>panr</a></span>
-</div>
-</div>
-</footer>
-<script src=https://blog.organizedchaos.tech/assets/main.js></script>
-<script src=https://blog.organizedchaos.tech/assets/prism.js></script>
-</div>
-</body>
-</html>
+<!doctype html><html lang=en dir=auto data-theme=light><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Raspberry Pi Pico Temperature Sensor | OrganizedChaos</title><meta name=keywords content><meta name=description content="For only $4 I couldn&rsquo;t pass up the opportunity to tinker with the new(ish) Raspberry Pi Pico!"><meta name=author content="jp"><link rel=canonical href=https://blog.organizedchaos.tech/posts/2021/11/pi-pico-first/><link crossorigin=anonymous href=/assets/css/stylesheet.9febe811275889917d4a563ecfba9259f640e55ea8d23b4cb214dc773786a0af.css integrity="sha256-n+voESdYiZF9SlY+z7qSWfZA5V6o0jtMshTcdzeGoK8=" rel="preload stylesheet" as=style><link rel=icon href=https://blog.organizedchaos.tech/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://blog.organizedchaos.tech/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://blog.organizedchaos.tech/favicon-32x32.png><link rel=apple-touch-icon href=https://blog.organizedchaos.tech/apple-touch-icon.png><link rel=mask-icon href=https://blog.organizedchaos.tech/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://blog.organizedchaos.tech/posts/2021/11/pi-pico-first/><noscript><style>#theme-toggle,.top-link{display:none}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"&&(document.querySelector("html").dataset.theme="dark")</script><meta property="og:url" content="https://blog.organizedchaos.tech/posts/2021/11/pi-pico-first/"><meta property="og:site_name" content="OrganizedChaos"><meta property="og:title" content="Raspberry Pi Pico Temperature Sensor"><meta property="og:description" content="For only $4 I couldn’t pass up the opportunity to tinker with the new(ish) Raspberry Pi Pico!"><meta property="og:locale" content="en_US"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-11-21T08:26:48-05:00"><meta property="article:modified_time" content="2021-11-21T08:26:48-05:00"><meta property="og:image" content="https://blog.organizedchaos.tech/covers/pi-pico-first.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.organizedchaos.tech/covers/pi-pico-first.png"><meta name=twitter:title content="Raspberry Pi Pico Temperature Sensor"><meta name=twitter:description content="For only $4 I couldn’t pass up the opportunity to tinker with the new(ish) Raspberry Pi Pico!"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://blog.organizedchaos.tech/posts/"},{"@type":"ListItem","position":2,"name":"Raspberry Pi Pico Temperature Sensor","item":"https://blog.organizedchaos.tech/posts/2021/11/pi-pico-first/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Raspberry Pi Pico Temperature Sensor","name":"Raspberry Pi Pico Temperature Sensor","description":"For only $4 I couldn\u0026rsquo;t pass up the opportunity to tinker with the new(ish) Raspberry Pi Pico!\n","keywords":[],"articleBody":"For only $4 I couldn’t pass up the opportunity to tinker with the new(ish) Raspberry Pi Pico!\nI had all these parts laying around already, so I decided to create a standalone temperature and humidity sensor.\nParts list: Here is everything that I used…\nRaspberry Pi Pico RP2040 DHT-22 Temperature \u0026 Humidity Sensor 16x2 Character LCD i2c character LCD backpack SPDT Slide Switch Perma-Proto Half-Sized Breadboard This can also be done on a breadboard, but I needed some soldering practice so I opted for the Perma-Proto board. 16k Resistor Wiring: This is how I wired everything together on the Perma-Proto board… My first attempt at using Fritzing to create a wiring diagram… Not the prettiest but it gets the job done Installing CircuitPython: Once everything was soldered together, I flashed the Pico with CircuitPython. In order to do this I grabbed a copy of the latest CircuitPython UF2 file. Then I held the BOOTSEL button on the Pico as I plugged it into my PC via USB. This made the Pico appear as a mass storage device. Then I dragged the UF2 onto the Pico and waited a couple of seconds for it to restart.\nThe Pico mounted as a mass storage device again, but now it had a few more files on it. The only one I cared about was code.py.\nCode! This is the code I ended up using, it’s a hacked together combination of sample code for both the DHT22 and the i2c 16x2 character LCD.\ncode.py import time import board import busio import adafruit_character_lcd.character_lcd_i2c as character_lcd import adafruit_dht import digitalio import os import sys lcd_columns = 16 lcd_rows = 2 # Initialize I2C bus. i2c = busio.I2C(board.GP1, board.GP0) # Initialize the lcd class lcd = character_lcd.Character_LCD_I2C(i2c, lcd_columns, lcd_rows) dht = adafruit_dht.DHT22(board.GP2) # Setup the backlight toggle switch button1 = digitalio.DigitalInOut(board.GP16) button1.direction = digitalio.Direction.INPUT button1.pull = digitalio.Pull.UP #Turn backlight on lcd.backlight = True while True: try: # Check if the backlight should be on or off if button1.value: lcd.backlight = True else: lcd.backlight = False # Get the temperature in C temperature_c = dht.temperature # Convert to Freedom Units temperature_f = temperature_c * (9 / 5) + 32 # Get the humidity humidity = dht.humidity # Write the results to the character LCD lcd.message = \"Temp: {:.1f} F\\nHumidity: {}% \".format(temperature_f, temperature_c, humidity) except RuntimeError as error: # Errors happen fairly often, DHT's are hard to read, just keep going print(error.args[0]) time.sleep(0.2) continue except Exception as error: # Catch a crazy failure dht.exit() raise error time.sleep(2.2) Backlight Toggle: I wired up the slide switch so I can easily toggle the LCD backlight on and off. Each time the loop runs, it checks for the state of the switch, and then sets the state of the backlight. This is somewhat clunky (and also causes a delay when toggling the backlight), but CircuitPython does not support user-written interrupts, so this is the best I could do.\nConclusion: With this project I achieved what I set out to do, create something useful and learn more about the Raspberry Pi Pico. Hopefully you learned something too!\n","wordCount":"514","inLanguage":"en","image":"https://blog.organizedchaos.tech/covers/pi-pico-first.png","datePublished":"2021-11-21T08:26:48-05:00","dateModified":"2021-11-21T08:26:48-05:00","author":{"@type":"Person","name":"jp"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.organizedchaos.tech/posts/2021/11/pi-pico-first/"},"publisher":{"@type":"Organization","name":"OrganizedChaos","logo":{"@type":"ImageObject","url":"https://blog.organizedchaos.tech/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><a href=https://blog.organizedchaos.tech/ accesskey=h title="OrganizedChaos (Alt + H)">OrganizedChaos</a><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu class=menu><li><a href=https://blog.organizedchaos.tech/posts/ title=Posts><span>Posts</span></a></li><li><a href=https://blog.organizedchaos.tech/about/ title=About><span>About</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent">Raspberry Pi Pico Temperature Sensor</h1><div class=post-meta><span title='2021-11-21 08:26:48 -0500 -0500'>2021-11-21</span>&nbsp;·&nbsp;<span>3 min</span>&nbsp;·&nbsp;<span>jp</span></div></header><figure class=entry-cover><img loading=eager src=https://blog.organizedchaos.tech/covers/pi-pico-first.png alt></figure><details class=toc open><summary accesskey=c title="(Alt + C)"><span class=title>Table of Contents</span></summary><div class=inner><ul><li><a href=#parts-list aria-label="Parts list:">Parts list:</a></li><li><a href=#wiring aria-label=Wiring:>Wiring:</a></li><li><a href=#installing-circuitpython aria-label="Installing CircuitPython:">Installing CircuitPython:</a></li><li><a href=#code aria-label=Code!>Code!</a></li><li><a href=#backlight-toggle aria-label="Backlight Toggle:">Backlight Toggle:</a></li><li><a href=#conclusion aria-label=Conclusion:>Conclusion:</a></li></ul></div></details><div class="post-content md-content"><p>For only $4 I couldn&rsquo;t pass up the opportunity to tinker with the new(ish) Raspberry Pi Pico!</p><p>I had all these parts laying around already, so I decided to create a standalone temperature and humidity sensor.</p><h2 id=parts-list>Parts list:<a hidden class=anchor aria-hidden=true href=#parts-list>#</a></h2><p>Here is everything that I used&mldr;</p><ol><li><a href=https://www.adafruit.com/product/4864>Raspberry Pi Pico RP2040</a></li><li><a href=https://www.adafruit.com/product/385>DHT-22 Temperature & Humidity Sensor</a></li><li><a href=https://www.adafruit.com/product/181>16x2 Character LCD</a></li><li><a href=https://www.adafruit.com/product/292>i2c character LCD backpack</a></li><li><a href=https://www.adafruit.com/product/805>SPDT Slide Switch</a></li><li><a href=https://www.adafruit.com/product/1609>Perma-Proto Half-Sized Breadboard</a><ol><li>This can also be done on a breadboard, but I needed some soldering practice so I opted for the Perma-Proto board.</li></ol></li><li>16k Resistor</li></ol><h2 id=wiring>Wiring:<a hidden class=anchor aria-hidden=true href=#wiring>#</a></h2><p>This is how I wired everything together on the Perma-Proto board&mldr;<figure class=center><img src=/post-assets/pi-pico-first/pico-temp.PNG alt="Pi Wiring Diagram" style=border-radius:8px><figcaption class=center style=color:gray>My first attempt at using Fritzing to create a wiring diagram&mldr; Not the prettiest but it gets the job done</figcaption></figure></p><h2 id=installing-circuitpython>Installing CircuitPython:<a hidden class=anchor aria-hidden=true href=#installing-circuitpython>#</a></h2><p>Once everything was soldered together, I flashed the Pico with CircuitPython. In order to do this I grabbed a copy of the latest <a href=https://circuitpython.org/board/raspberry_pi_pico/>CircuitPython UF2 file</a>. Then I held the BOOTSEL button on the Pico as I plugged it into my PC via USB. This made the Pico appear as a mass storage device. Then I dragged the UF2 onto the Pico and waited a couple of seconds for it to restart.</p><p>The Pico mounted as a mass storage device again, but now it had a few more files on it. The only one I cared about was <code>code.py</code>.</p><h2 id=code>Code!<a hidden class=anchor aria-hidden=true href=#code>#</a></h2><p>This is the code I ended up using, it&rsquo;s a hacked together combination of sample code for both the <a href=https://learn.adafruit.com/dht/dht-circuitpython-code#example-code-2980244-19>DHT22</a> and the <a href=https://learn.adafruit.com/i2c-spi-lcd-backpack/python-circuitpython#full-example-code-3007416-21>i2c 16x2 character LCD</a>.</p><p><details open><summary markdown=span>code.py</summary><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> time
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> board
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> busio
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> adafruit_character_lcd.character_lcd_i2c <span style=color:#66d9ef>as</span> character_lcd
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> adafruit_dht
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> digitalio
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> os
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> sys
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>lcd_columns <span style=color:#f92672>=</span> <span style=color:#ae81ff>16</span>
+</span></span><span style=display:flex><span>lcd_rows <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Initialize I2C bus.</span>
+</span></span><span style=display:flex><span>i2c <span style=color:#f92672>=</span> busio<span style=color:#f92672>.</span>I2C(board<span style=color:#f92672>.</span>GP1, board<span style=color:#f92672>.</span>GP0)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Initialize the lcd class</span>
+</span></span><span style=display:flex><span>lcd <span style=color:#f92672>=</span> character_lcd<span style=color:#f92672>.</span>Character_LCD_I2C(i2c, lcd_columns, lcd_rows)
+</span></span><span style=display:flex><span>dht <span style=color:#f92672>=</span> adafruit_dht<span style=color:#f92672>.</span>DHT22(board<span style=color:#f92672>.</span>GP2)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Setup the backlight toggle switch</span>
+</span></span><span style=display:flex><span>button1 <span style=color:#f92672>=</span> digitalio<span style=color:#f92672>.</span>DigitalInOut(board<span style=color:#f92672>.</span>GP16)
+</span></span><span style=display:flex><span>button1<span style=color:#f92672>.</span>direction <span style=color:#f92672>=</span> digitalio<span style=color:#f92672>.</span>Direction<span style=color:#f92672>.</span>INPUT
+</span></span><span style=display:flex><span>button1<span style=color:#f92672>.</span>pull <span style=color:#f92672>=</span> digitalio<span style=color:#f92672>.</span>Pull<span style=color:#f92672>.</span>UP
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#Turn backlight on</span>
+</span></span><span style=display:flex><span>lcd<span style=color:#f92672>.</span>backlight <span style=color:#f92672>=</span> <span style=color:#66d9ef>True</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>while</span> <span style=color:#66d9ef>True</span>:      
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>try</span>:
+</span></span><span style=display:flex><span>        <span style=color:#75715e># Check if the backlight should be on or off</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> button1<span style=color:#f92672>.</span>value:
+</span></span><span style=display:flex><span>            lcd<span style=color:#f92672>.</span>backlight <span style=color:#f92672>=</span> <span style=color:#66d9ef>True</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>            lcd<span style=color:#f92672>.</span>backlight <span style=color:#f92672>=</span> <span style=color:#66d9ef>False</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># Get the temperature in C</span>
+</span></span><span style=display:flex><span>        temperature_c <span style=color:#f92672>=</span> dht<span style=color:#f92672>.</span>temperature
+</span></span><span style=display:flex><span>        <span style=color:#75715e># Convert to Freedom Units</span>
+</span></span><span style=display:flex><span>        temperature_f <span style=color:#f92672>=</span> temperature_c <span style=color:#f92672>*</span> (<span style=color:#ae81ff>9</span> <span style=color:#f92672>/</span> <span style=color:#ae81ff>5</span>) <span style=color:#f92672>+</span> <span style=color:#ae81ff>32</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># Get the humidity</span>
+</span></span><span style=display:flex><span>        humidity <span style=color:#f92672>=</span> dht<span style=color:#f92672>.</span>humidity
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># Write the results to the character LCD</span>
+</span></span><span style=display:flex><span>        lcd<span style=color:#f92672>.</span>message <span style=color:#f92672>=</span> 
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;Temp: </span><span style=color:#e6db74>{:.1f}</span><span style=color:#e6db74> F</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>Humidity: </span><span style=color:#e6db74>{}</span><span style=color:#e6db74>% &#34;</span><span style=color:#f92672>.</span>format(temperature_f, temperature_c, humidity)
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>RuntimeError</span> <span style=color:#66d9ef>as</span> error:
+</span></span><span style=display:flex><span>        <span style=color:#75715e># Errors happen fairly often, DHT&#39;s are hard to read, just keep going</span>
+</span></span><span style=display:flex><span>        print(error<span style=color:#f92672>.</span>args[<span style=color:#ae81ff>0</span>])
+</span></span><span style=display:flex><span>        time<span style=color:#f92672>.</span>sleep(<span style=color:#ae81ff>0.2</span>)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>continue</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>Exception</span> <span style=color:#66d9ef>as</span> error:
+</span></span><span style=display:flex><span>        <span style=color:#75715e># Catch a crazy failure</span>
+</span></span><span style=display:flex><span>        dht<span style=color:#f92672>.</span>exit()
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>raise</span> error
+</span></span><span style=display:flex><span>    time<span style=color:#f92672>.</span>sleep(<span style=color:#ae81ff>2.2</span>)
+</span></span></code></pre></div></details></p><h2 id=backlight-toggle>Backlight Toggle:<a hidden class=anchor aria-hidden=true href=#backlight-toggle>#</a></h2><p>I wired up the slide switch so I can easily toggle the LCD backlight on and off. Each time the loop runs, it checks for the state of the switch, and then sets the state of the backlight. This is somewhat clunky (and also causes a delay when toggling the backlight), but CircuitPython does not support user-written interrupts, so this is the best I could do.</p><h2 id=conclusion>Conclusion:<a hidden class=anchor aria-hidden=true href=#conclusion>#</a></h2><p>With this project I achieved what I set out to do, create something useful and learn more about the Raspberry Pi Pico. Hopefully you learned something too!</p></div><footer class=post-footer><ul class=post-tags></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://blog.organizedchaos.tech/>OrganizedChaos</a></span> ·
+<span>Powered by
+<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>
